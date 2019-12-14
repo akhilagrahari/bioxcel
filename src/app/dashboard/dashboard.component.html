@@ -1,0 +1,74 @@
+<app-header>
+</app-header>
+<div class="content" *ngIf="isDataLoaded">
+  <div class="row">
+    <div class="col-8">
+      <div class="card-columns">
+        <div class="card" *ngFor="let product of productList; let index = index;">
+          <div class="card-header">{{product.product_name}}</div>
+          <div class="card-body text-center">
+            <div class="row">
+              <img [src]="product.product_img">
+              <div class="centered" *ngIf="product.quantityList.length === 0">Not in Stock</div>
+            </div>
+            <div class="row" style="padding-top: 10px;">
+              <div class="col" style="margin-right: 20px">
+                <h6>Price : {{product.product_price+"/-"}}</h6>
+              </div>
+              <div class="col" style="margin-left: 20px">
+                <select [(ngModel)]="product.selectedQuantity" [disabled]="product.quantityList.length === 0">
+                  <option [ngValue]="i" *ngFor="let i  of product.quantityList">{{i}}</option>
+                </select>
+              </div>
+
+            </div>
+          </div>
+          <div class="card-footer ">
+            <button [disabled]="product.quantityList.length === 0" (click)="addToCart(product, index)">Add To Cart</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-4">
+      <div class="card">
+        <div class="card-header">
+          <h6>Cart Detail</h6>
+        </div>
+        <div class="card-body">
+          <div *ngIf="cartList.length === 0" style="text-align: center;">
+            <span>No Product Selected</span>
+          </div>
+          <div *ngIf="cartList.length > 0">
+              <table class="table table-bordered">
+                  <thead style="background-color: black; color: white;">
+                    <tr>
+                      <th scope="col">Product Name</th>
+                      <th scope="col">Quantity</th>
+                      <th scope="col">Amount</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let cart of cartList; let index = index">
+                      <td>{{cart.product}}</td>
+                      <td>{{cart.quantity}}</td>
+                      <td>{{cart.totalPrice+ '/-'}}</td>
+                      <button  class="btn" (click)="removeProduct(cart, index)" aria-label="Close">
+                          &times;
+                        </button>
+                    </tr>
+                    <tr>
+                      <td>Total Amount</td>
+                      <td></td>
+                      <td>{{getTotalPrice() + '/-'}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+          </div>
+        </div>
+        <div class="card-footer" *ngIf="cartList.length > 0" style="text-align: right;">
+          <button >Proceed</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
